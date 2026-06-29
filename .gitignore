@@ -1,0 +1,12 @@
+# 1. Ignore Obsidian's operational UI and workspace caches
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.obsidian/appearance.json
+
+# 2. Ignore Obsidian's local deleted files system entirely
+.trash/
+
+# 3. Optional: Ignore third-party plugin source files to keep diffs clean
+# (This prevents tracking the actual JS/CSS source code of Dataview, etc.)
+.obsidian/plugins/
