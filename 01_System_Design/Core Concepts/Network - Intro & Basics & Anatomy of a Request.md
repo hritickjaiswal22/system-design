@@ -25,7 +25,7 @@ There are 7 layers in OSI model but from interview and application development o
 
 At this layer, we have TCP, QUIC and UDP which provide end-to-end communication services. **==Think of them like a layer that provides features like reliability, ordering, and flow control on top of the network layer.==**
 
-###### Application Layer (Layer 7)
+###### [[Application Layer (Layer 7)]]
 
 At the final layer are the application protocols like DNS, HTTP, Websockets, WebRTC. These are common protocols that build on top of TCP (or UDP, in the case of WebRTC) to provide a layer of abstraction for different types of data typically associated with web applications.
 
