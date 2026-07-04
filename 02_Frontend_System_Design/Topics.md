@@ -1,0 +1,23 @@
+- [ ] RADIO framework
+- [ ] Requirement Gathering (Study how to effectively gather requirements both functional and non-functional, how many, ...)
+- [ ] Rendering Strategies (Server Components, SSG, SSR, ISR, CSR, Edge Rendering) (Pros , Cons, Which to pick , why and why discard others)
+- [ ] API Design (REST vs GraphQl) (Which to pick, why , pros and cons)
+- [ ] API Contract for the app
+- [ ] Server State Management (Required or not, If required then how to implement with what tools)
+- [ ] State Management (Redux vs Zustand, specifics for the app store)
+- [ ] Architecture of the app
+- [ ] Authentication (Token vs ID, best location, why ...)
+- [ ] Optimizations and Deep Dive for the app
+      - Performance optimizations
+	- Networking techniques and optimization
+	- Error Handling & Resilience
+	- User experience
+	- Accessibility (a11y)
+	- Search engine optimization
+	- Multilingual support
+	- Multi-device support
+	- Security
+	- Logging
+	- Testing Strategy
+
+https://claude.ai/chat/3a38f9be-84ec-490f-95dc-c6f2e73602b2
