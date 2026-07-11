@@ -275,3 +275,13 @@ Understand:
 If you can confidently explain these two applications and the trade-offs, you'll cover the vast majority of consistent hashing discussions in L4/L5 product design interviews.
 
 Further reading - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a4b1a15-f2b4-83e8-bc97-3938a5bb891d
+
+For traffic hot spots - https://chatgpt.com/g/g-p/c/6a4bb68f-8ec8-83ee-aac0-cf09c30b2a6e
+
+| Problem                                          | Consistent Hashing + Virtual Nodes? | Typical Solution                                       |
+| ------------------------------------------------ | ----------------------------------- | ------------------------------------------------------ |
+| Uneven data placement                            | ✅ Yes                               | Virtual nodes                                          |
+| Minimal data movement when adding/removing nodes | ✅ Yes                               | Consistent hashing                                     |
+| One key receives massive traffic                 | ❌ No                                | Replication, caching, request coalescing, key sharding |
+| Read-heavy celebrity profile                     | ❌ No                                | Cache + replicas                                       |
+| Write-heavy hot key (e.g., global like counter)  | ❌ No                                | Split/shard the logical key, aggregate asynchronously  |
