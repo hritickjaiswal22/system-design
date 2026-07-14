@@ -10,6 +10,8 @@
 # 3. Optional: Ignore third-party plugin source files to keep diffs clean
 # (This prevents tracking the actual JS/CSS source code of Dataview, etc.)
 .obsidian/plugins/
+.obsidian
+_templates/Daily Note.md
 
 todos.md
 /todos

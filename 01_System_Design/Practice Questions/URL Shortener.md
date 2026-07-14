@@ -81,3 +81,23 @@ Cons of the above design
 
 1. Stale analytics data
 2. Eventual consistency of analytics data
+
+
+# Improvements
+
+1. User Entity missing
+2. Logic for creating the short url
+3. Analytics Improvement
+4. Handling Hot Keys
+5. Revise Covering index and partial index above would be "partial index"
+6. Redis "invalidated immediately" on every visit
+
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a55a80e-6ad0-83ee-898f-9529bed962bf
+
+# New Learning
+
+Redirects are of 2 status codes
+1. 301 - temporary 
+2. 302 - permanent (Basically caches, proxies, DNS can cache it or store it)
+
+A server EC2 instance can handle **around** **1k reqs/sec** ("around" means it depends on payload size, computation heavy or not, etc but in an interview good strong number to assume)
