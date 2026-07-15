@@ -1,6 +1,4 @@
-
 # Why Redis is Single Threaded
-
 
 ![[Screenshot from 2026-07-12 07-58-58.png]]
 ![[Pasted image 20260712080101.png]]
@@ -12,7 +10,6 @@
 ![[Pasted image 20260712082417.png]]
 ![[Pasted image 20260712082449.png]]
 ![[Pasted image 20260712082835.png]]
-
 
 Thus by being single threaded redis makes its operations "atomic" and avoids the requirement of "locks" and being "in-memory" allows it to be extremely efficient
 
@@ -29,19 +26,19 @@ The core structure underneath Redis is a key-value store: **every object in Redi
 Think of Redis as:
 
 Key
- ↓
+↓
 ┌─────────────────────┐
-│     Data Structure  │
+│ Data Structure │
 ├─────────────────────┤
-│ String              │
-│ Hash                │
-│ List                │
-│ Set                 │
-│ Sorted Set          │
-│ Stream              │
-│ Bitmap              │
-│ HyperLogLog         │
-│ Geospatial Index    │
+│ String │
+│ Hash │
+│ List │
+│ Set │
+│ Sorted Set │
+│ Stream │
+│ Bitmap │
+│ HyperLogLog │
+│ Geospatial Index │
 └─────────────────────┘
 
 **Every key points to exactly one Redis data structure.**
@@ -57,7 +54,7 @@ This is a great question, and it's a very common misunderstanding.
 The key point is:
 
 > **A single key can only have one data structure type at a time.**
-> 
+>
 > **But a Redis database can store millions of keys, each with a different type.**
 
 No partitioning is required.
@@ -238,18 +235,18 @@ So there is **no need for partitions or separate databases** just because you're
 
 # Interview Cheat Sheet
 
-|Data Structure|Best Used For|Time Complexity|Why It's Efficient|
-|---|---|---|---|
-|**String**|Cache, sessions, counters|O(1)|Hash table lookup in memory|
-|**Hash**|Objects (users, carts)|O(1)|Groups many fields under one key with compact storage|
-|**Set**|Unique collections|O(1)|Fast membership checks using hashing|
-|**Sorted Set**|Rankings, leaderboards, rate limiting|O(log n)|Maintains sorted order without re-sorting on every query|
-|**List**|Queues, feeds, recent items|O(1) at ends|Efficient append/pop operations|
-|**Pub/Sub**|Real-time messaging|O(subscribers)|Direct in-memory message fan-out|
-|**Streams**|Durable event queues|O(1) append|Append-only log with persistence and consumer groups|
-|**Bitmap**|Boolean flags at scale|O(1)|One bit per flag instead of one byte or more|
-|**HyperLogLog**|Approximate unique counts|O(1)|Fixed ~12 KB memory regardless of cardinality|
-|**Bloom Filter**|Existence checks|O(k)|Tiny memory footprint for fast probabilistic lookups|
+| Data Structure   | Best Used For                         | Time Complexity | Why It's Efficient                                       |
+| ---------------- | ------------------------------------- | --------------- | -------------------------------------------------------- |
+| **String**       | Cache, sessions, counters             | O(1)            | Hash table lookup in memory                              |
+| **Hash**         | Objects (users, carts)                | O(1)            | Groups many fields under one key with compact storage    |
+| **Set**          | Unique collections                    | O(1)            | Fast membership checks using hashing                     |
+| **Sorted Set**   | Rankings, leaderboards, rate limiting | O(log n)        | Maintains sorted order without re-sorting on every query |
+| **List**         | Queues, feeds, recent items           | O(1) at ends    | Efficient append/pop operations                          |
+| **Pub/Sub**      | Real-time messaging                   | O(subscribers)  | Direct in-memory message fan-out                         |
+| **Streams**      | Durable event queues                  | O(1) append     | Append-only log with persistence and consumer groups     |
+| **Bitmap**       | Boolean flags at scale                | O(1)            | One bit per flag instead of one byte or more             |
+| **HyperLogLog**  | Approximate unique counts             | O(1)            | Fixed ~12 KB memory regardless of cardinality            |
+| **Bloom Filter** | Existence checks                      | O(k)            | Tiny memory footprint for fast probabilistic lookups     |
 
 # Redis Cluster
 
@@ -419,13 +416,9 @@ Redis performs this migration online while the cluster continues serving request
 Hash slots provide several benefits:
 
 - Nodes don't need to store arbitrary key lists—just slot ranges.
-    
 - Rebalancing moves **slots**, not arbitrary key assignments.
-    
 - Clients can cache the slot-to-node mapping for efficient routing.
-    
 - Slot ownership changes are straightforward during cluster expansion or shrinkage.
-    
 
 ---
 
@@ -450,7 +443,6 @@ So if an interviewer asks, "Does Redis Cluster use consistent hashing?", the tec
 > **No. Redis Cluster uses a fixed set of 16,384 hash slots. Nodes are assigned ranges of slots, and scaling involves reassigning slots between nodes rather than using a consistent hashing ring.**
 
 For system design interviews, you can think of Redis Cluster as a specialized form of sharding where the partition unit is a **hash slot** instead of the keys themselves. The underlying principle remains the same: **each node owns part of the keyspace, and adding or removing nodes requires migrating the affected partitions.**
-
 
 # Infrastructure Configurations
 
@@ -488,13 +480,13 @@ Another common use of Redis in system design settings is as a distributed lock. 
 
 Redis works here because it's one shared server all your app servers can reach, and every command executes atomically. The lock itself is just a key that everyone agrees on, like lock:concert:343. To acquire it, try to create that key:
 
-	SET lock:concert:343 my-token NX EX 30
+    SET lock:concert:343 my-token NX EX 30
 
 The NX flag makes the SET succeed only if the key doesn't already exist. If it succeeded, you own the lock. If not, someone else does. Wait and retry. The EX 30 puts a 30 second expiry on the key so a crashed process can't hold the lock forever, and my-token is a random value unique to you, which matters in a second.
 
 Releasing the lock means deleting the key, but don't just DEL it. Your lock may have expired and been acquired by someone else, and a blind delete would remove _their_ lock. Instead, check that the key still holds your token and delete only then. The check and delete run as a tiny [Lua script]. Redis executes the whole script as one command on its single thread, which is what makes it atomic:
 
-	if redis.call("GET", KEYS[1]) == ARGV[1] then return redis.call("DEL", KEYS[1]) end
+    if redis.call("GET", KEYS[1]) == ARGV[1] then return redis.call("DEL", KEYS[1]) end
 
 This is one of the **most common Redis interview topics**. Let's build it from first principles.
 
@@ -524,13 +516,9 @@ Sometimes **only one server should perform an operation at a time.**
 Examples:
 
 - Only one user should purchase the last concert ticket.
-    
 - Only one worker should send a monthly invoice.
-    
 - Only one server should process a payment.
-    
 - Only one scheduler should generate a report.
-    
 
 Without coordination:
 
@@ -1016,15 +1004,10 @@ Succeeds.
 You'll see them in many production systems, for example:
 
 - **Seat booking:** Prevent two users from reserving the same seat simultaneously (though databases often remain the source of truth with transactions or optimistic locking).
-    
 - **Payment processing:** Ensure the same payment or refund isn't processed concurrently.
-    
 - **Cron jobs:** Ensure only one instance of a scheduled job runs across multiple application servers.
-    
 - **Cache rebuilding:** Prevent a "cache stampede" where many servers regenerate the same expensive cache entry simultaneously.
-    
 - **Inventory updates:** Serialize updates to a shared stock item when required.
-    
 
 ---
 
@@ -1045,7 +1028,6 @@ That's because Redis and your database are separate systems. If your database co
 **Rule of thumb for interviews:**
 
 - **Database invariants (money, inventory, seat allocation):** Let the database guarantee correctness.
-    
 - **Cross-service coordination (jobs, cache rebuilds, leader election, duplicate work prevention):** Redis distributed locks are an excellent fit.
 
 # Redis for Leaderboards
@@ -1082,11 +1064,8 @@ Retry-After: <seconds>
 Redis is perfect because:
 
 - Incrementing counters is extremely fast (O(1))
-    
 - Keys can expire automatically
-    
 - Everything happens in memory
-    
 
 ---
 
@@ -1430,11 +1409,8 @@ return count
 Redis executes the entire script as **one atomic operation**:
 
 - no other client can interleave commands
-    
 - either both operations complete or neither does
-    
 - no crash can leave the key without its TTL
-    
 
 This is the same reason Lua scripts are used for safe distributed lock release.
 
@@ -1452,9 +1428,7 @@ INCR
 Both are:
 
 - **Time:** O(1)
-    
 - **Memory:** O(number of active users × active windows)
-    
 
 ---
 
@@ -1463,13 +1437,9 @@ Both are:
 The fixed-window rate limiter in Redis works because:
 
 1. Each **user + time window** maps to a unique Redis key.
-    
 2. `INCR` counts requests in O(1).
-    
 3. If the count exceeds the limit, return **429 Too Many Requests**.
-    
 4. Set the TTL **only when `INCR` returns 1**, so the window expires at the intended boundary.
-    
 5. Execute `INCR` and the conditional `EXPIRE` in a **Lua script** to prevent a crash from leaving a counter that never expires.
 
 # Redis for Pub/Sub
@@ -1478,8 +1448,8 @@ Streams are for consumers that need to catch up on what they missed. When you on
 
 The basic commands are straightforward:
 
-	PUBLISH channel message   # Sends a message to all subscribers of 'channel'
-	SUBSCRIBE channel         # Listens for messages on 'channel'
+    PUBLISH channel message   # Sends a message to all subscribers of 'channel'
+    SUBSCRIBE channel         # Listens for messages on 'channel'
 
 In cluster mode you'll reach for the sharded variants (SPUBLISH/SSUBSCRIBE), which hash the channel to a slot like any key.
 
@@ -1515,4 +1485,4 @@ In an interview, recognize potential hot key issues (+) and proactively design r
 2. Don't expect query flexibility: there are no joins, no cross-key queries, and in a cluster, multi-key operations only work within a single slot (hash tags notwithstanding).
 3. And when you need durable, replayable streams with long retention for many independent consumers, that's Kafka's job.
 
-https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a534ae1-e370-83e8-854f-984302178442
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a534ae1-e370-83e8-854f-984302178442

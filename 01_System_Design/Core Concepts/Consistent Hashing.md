@@ -3,10 +3,10 @@ https://www.hellointerview.com/learn/system-design/core-concepts/consistent-hash
 
 Those are exactly the two scenarios I'd focus on for **product/system design interviews**. However, they are not equally common.
 
-|Use Case|Interview Frequency|Should you mention Consistent Hashing?|
-|---|---|---|
-|Database sharding|⭐⭐⭐⭐⭐ Very Common|**Yes**|
-|Sticky routing in load balancers|⭐⭐⭐ Moderate|**Sometimes**|
+| Use Case                         | Interview Frequency    | Should you mention Consistent Hashing? |
+| -------------------------------- | ---------------------- | -------------------------------------- |
+| Database sharding                | ⭐⭐⭐⭐⭐ Very Common | **Yes**                                |
+| Sticky routing in load balancers | ⭐⭐⭐ Moderate        | **Sometimes**                          |
 
 Let's discuss each.
 
@@ -19,17 +19,11 @@ This is where interviewers most expect you to know consistent hashing.
 Suppose you're designing:
 
 - Instagram
-    
 - WhatsApp
-    
 - Twitter/X
-    
 - Uber
-    
 - Slack
-    
 - GitHub
-    
 
 Eventually one PostgreSQL/MySQL instance isn't enough.
 
@@ -107,15 +101,10 @@ This comes up less often, but it is still useful.
 Imagine designing:
 
 - Google Docs
-    
 - Figma
-    
 - WhatsApp Web
-    
 - Chat application
-    
 - Multiplayer game
-    
 
 A user establishes a WebSocket connection.
 
@@ -138,15 +127,10 @@ The load balancer therefore needs a deterministic mapping.
 Possible strategies include:
 
 - Cookie affinity
-    
 - Session affinity
-    
 - IP hash
-    
 - Client ID hash
-    
 - Consistent hashing
-    
 
 If you have:
 
@@ -206,13 +190,9 @@ Don't force consistent hashing into every design.
 For example, if you're designing:
 
 - Netflix
-    
 - YouTube
-    
 - Amazon
-    
 - Uber
-    
 
 the interviewer asks:
 
@@ -234,17 +214,14 @@ API Servers
 using algorithms like:
 
 - Round Robin
-    
 - Least Connections
-    
 - Least Response Time
-    
 
 There is **no need** for consistent hashing here because API servers are typically stateless, so any server can handle any request.
 
 ---
 
-# My recommendation for SDE-2 (16–20 LPA)
+# My recommendation for SDE-2
 
 Know these two patterns well:
 
@@ -253,24 +230,17 @@ Know these two patterns well:
 Be able to explain:
 
 - Why `hash(key) % N` fails when scaling.
-    
 - How consistent hashing reduces data migration.
-    
 - Why virtual nodes improve load balance.
-    
 - How resharding works when adding/removing shards.
-    
 
 ### 2. Sticky routing (good to know)
 
 Understand:
 
 - Why WebSockets and other long-lived connections need affinity.
-    
 - How consistent hashing reduces remapping during scale-out.
-    
 - When simpler sticky-session mechanisms (cookies, IP hash) are sufficient.
-    
 
 If you can confidently explain these two applications and the trade-offs, you'll cover the vast majority of consistent hashing discussions in L4/L5 product design interviews.
 
@@ -280,8 +250,8 @@ For traffic hot spots - https://chatgpt.com/g/g-p/c/6a4bb68f-8ec8-83ee-aac0-cf09
 
 | Problem                                          | Consistent Hashing + Virtual Nodes? | Typical Solution                                       |
 | ------------------------------------------------ | ----------------------------------- | ------------------------------------------------------ |
-| Uneven data placement                            | ✅ Yes                               | Virtual nodes                                          |
-| Minimal data movement when adding/removing nodes | ✅ Yes                               | Consistent hashing                                     |
-| One key receives massive traffic                 | ❌ No                                | Replication, caching, request coalescing, key sharding |
-| Read-heavy celebrity profile                     | ❌ No                                | Cache + replicas                                       |
-| Write-heavy hot key (e.g., global like counter)  | ❌ No                                | Split/shard the logical key, aggregate asynchronously  |
+| Uneven data placement                            | ✅ Yes                              | Virtual nodes                                          |
+| Minimal data movement when adding/removing nodes | ✅ Yes                              | Consistent hashing                                     |
+| One key receives massive traffic                 | ❌ No                               | Replication, caching, request coalescing, key sharding |
+| Read-heavy celebrity profile                     | ❌ No                               | Cache + replicas                                       |
+| Write-heavy hot key (e.g., global like counter)  | ❌ No                               | Split/shard the logical key, aggregate asynchronously  |
