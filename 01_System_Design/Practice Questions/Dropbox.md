@@ -112,3 +112,34 @@ Same as Write path except id is shared which the owner which he/she with anyone 
 4. Use of chunking, chunk sequence numbers allow for resume, stop, retry and via checksums integrity is handled
 
 https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a59db5d-9604-83ee-ae9d-39eeb700095c
+
+
+# Improvements for v1
+
+## 1. Functional Requirement fix *
+
+Users can automatically sync files across devices
+
+### 2. Non - Functional Requirement Fixes
+
+- The system should be highly available (prioritizing availability over consistency). **(Not more consistent as you picked)**
+- The system should support files as large as **50GB. (Not just 5 - 6 Gbs)**
+- The system should be secure and reliable. We should be able to recover files if they are lost or corrupted.
+- The system should make upload, download, and sync times as fast as possible (low latency).
+
+**Below the line (out of scope):**
+
+- The system should have a storage limit per user
+- The system should scan files for viruses and malware
+
+## 3. Use of No-SQL DB
+
+## 4. Proper flow of 'status' update and Missing S3 Event Notification fix *
+
+## 5. Make use of CDN *
+
+## 6.  How can you support large files? (Deep Dive) *
+
+## 7. How can you ensure file security? (Deep Dive) *
+
+## Kafka explanation 
