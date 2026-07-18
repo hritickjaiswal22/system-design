@@ -118,7 +118,8 @@ https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterc
 
 ## 1. Functional Requirement fix *
 
-Users can automatically sync files across devices
+1. Users can automatically sync files across devices
+2. Remove folder support from functional requirements
 
 ### 2. Non - Functional Requirement Fixes
 
@@ -134,12 +135,14 @@ Users can automatically sync files across devices
 
 ## 3. Use of No-SQL DB
 
-## 4. Proper flow of 'status' update and Missing S3 Event Notification fix *
+## 4. Correct upload lifecycle (`PENDING → COMPLETE`) + S3 Event Notifications *
 
-## 5. Make use of CDN *
+## 5. Add CDN *
 
-## 6.  How can you support large files? (Deep Dive) *
+## 6.  Deep dive: large file uploads (multipart, chunking, resume, checksums, retries) *
 
-## 7. How can you ensure file security? (Deep Dive) *
+## 7. Deep dive: security (signed URLs, encryption, ACLs) *
 
-## Kafka explanation 
+## 8. Kafka explanation 
+
+## 9.Design the **device synchronization flow** (how changes propagate to other devices)
