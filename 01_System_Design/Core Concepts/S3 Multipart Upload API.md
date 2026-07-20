@@ -1,6 +1,4 @@
-
-
->#Explain to me how S3 Multipart Upload API works in complete detail
+> #Explain to me how S3 Multipart Upload API works in complete detail
 
 This is an **extremely important** topic for backend and system design interviews because it solves one of the biggest problems in distributed systems:
 
@@ -41,15 +39,10 @@ You must upload the whole 20 GB again.
 This is terrible because
 
 - huge bandwidth waste
-    
 - huge time waste
-    
 - mobile networks fail frequently
-    
 - browser may crash
-    
 - upload may timeout
-    
 
 ---
 
@@ -542,9 +535,7 @@ Part3 → ETag C
 S3 validates
 
 - these parts exist
-    
 - the ETags match the uploaded content
-    
 
 Then assembles them in **PartNumber order**, not in the order they were uploaded.
 
@@ -632,12 +623,12 @@ You can continue uploading missing parts later.
 
 Important interview numbers:
 
-|Property|Value|
-|---|---|
-|Maximum object size|5 TB|
-|Maximum parts|10,000|
-|Part size|5 MB – 5 GB (last part can be smaller than 5 MB)|
-|Recommended part size|Typically 8–100 MB or larger depending on object size and network conditions|
+| Property              | Value                                                                        |
+| --------------------- | ---------------------------------------------------------------------------- |
+| Maximum object size   | 5 TB                                                                         |
+| Maximum parts         | 10,000                                                                       |
+| Part size             | 5 MB – 5 GB (last part can be smaller than 5 MB)                             |
+| Recommended part size | Typically 8–100 MB or larger depending on object size and network conditions |
 
 ---
 
@@ -712,31 +703,23 @@ S3
 This architecture has two major advantages:
 
 - **Scalability:** Your backend never becomes a bottleneck because the large file data flows directly from the client to S3.
-    
 - **Cost and reliability:** The backend handles only lightweight control requests (creating upload sessions, issuing presigned URLs, and completing uploads), while S3 handles the heavy data transfer.
-    
 
 # Interview takeaways
 
 A strong interview answer should emphasize these design benefits:
 
 - **Reliability:** Only failed parts are retried instead of the entire file.
-    
 - **Parallelism:** Multiple parts can be uploaded concurrently to maximize throughput.
-    
 - **Resumability:** Uploads can continue later using the same `UploadId`.
-    
 - **Atomic visibility:** The object becomes visible only after `CompleteMultipartUpload`, preventing clients from seeing partially uploaded files.
-    
 - **Backend scalability:** Using presigned URLs allows clients to upload directly to S3, avoiding unnecessary load on application servers.
-    
 
 These are the reasons multipart upload is the standard approach for uploading large objects to S3 and similar object storage systems in production distributed systems.
 
+    Q : So the presigned urls for all the chunks would be send along with uploadId as response for the CreateMultipartUpload request
 
-	Q : So the presigned urls for all the chunks would be send along with uploadId as response for the CreateMultipartUpload request 
-	
-	Therefore if file size is 50 GB and chunk size is 10 Mb then 5000 pre-signed urls are sent !!!
+    Therefore if file size is 50 GB and chunk size is 10 Mb then 5000 pre-signed urls are sent !!!
 
 Excellent observation. This is exactly the kind of question a senior engineer asks.
 
@@ -753,9 +736,7 @@ Let's see why.
 Suppose
 
 - File = **50 GB**
-    
 - Part size = **10 MB**
-    
 
 ```
 50 GB / 10 MB = 5000 parts
@@ -1004,15 +985,10 @@ So for very large files, clients increase the part size to stay under that limit
 If you use the AWS SDK's high-level upload utilities (such as the Transfer Manager or multipart upload helpers), the SDK typically:
 
 - Starts the multipart upload.
-    
 - Chooses an appropriate part size.
-    
 - Uploads several parts in parallel.
-    
 - Retries failed parts.
-    
 - Completes the upload.
-    
 
 When you're building your own backend with **presigned URLs**, you're responsible for deciding whether to generate URLs one-by-one or in batches.
 
@@ -1030,8 +1006,7 @@ A strong answer would be:
 
 That's the kind of trade-off discussion interviewers look for.
 
-
-	ok so you said that ETags are necessary because upon completion the clients sends a map of part number and corresponding ETag which the S3 then uses for ordering and marking it as complete , right ???
+    ok so you said that ETags are necessary because upon completion the clients sends a map of part number and corresponding ETag which the S3 then uses for ordering and marking it as complete , right ???
 
 You're **90% correct**, but there's an important nuance that separates a good answer from a senior-level answer.
 
@@ -1246,14 +1221,13 @@ So the most precise interview answer is:
 
 That's the level of precision interviewers appreciate.
 
+    Consider below
 
-	Consider below
-	
-	"Next, let's talk about how to uniquely identify a file and a chunk. When you try to resume an upload, the very first question that should be asked is: (1) Have I tried to upload this file before? and (2) If yes, which chunks have I already uploaded? To answer the first question, we cannot naively rely on the file name. This is because two different users (or even the same user) could upload files with the same name. Instead, we need to rely on a unique identifier that is derived from the file's content. This is called a fingerprint.
-	A fingerprint is a mathematical calculation that generates a unique hash value based on the content of the file. This hash value, often created using cryptographic hash functions like SHA-256, serves as a robust and unique identifier for the file's content regardless of its name or the source of the upload. By computing this fingerprint, we can efficiently determine whether the file has been uploaded before (deduplication) and whether an in-progress upload can be resumed."
-	
-	
-	Then this fingerprint and uploadId also needs to be stored in the metadata table for each chunkId 
+    "Next, let's talk about how to uniquely identify a file and a chunk. When you try to resume an upload, the very first question that should be asked is: (1) Have I tried to upload this file before? and (2) If yes, which chunks have I already uploaded? To answer the first question, we cannot naively rely on the file name. This is because two different users (or even the same user) could upload files with the same name. Instead, we need to rely on a unique identifier that is derived from the file's content. This is called a fingerprint.
+    A fingerprint is a mathematical calculation that generates a unique hash value based on the content of the file. This hash value, often created using cryptographic hash functions like SHA-256, serves as a robust and unique identifier for the file's content regardless of its name or the source of the upload. By computing this fingerprint, we can efficiently determine whether the file has been uploaded before (deduplication) and whether an in-progress upload can be resumed."
+
+
+    Then this fingerprint and uploadId also needs to be stored in the metadata table for each chunkId
 
 Excellent catch. You're now thinking about **building your own Dropbox/Google Drive**, not just using S3. This distinction is important.
 
@@ -1553,29 +1527,26 @@ If you used only the fingerprint, you couldn't distinguish between the abandoned
 So in practice:
 
 - **Fingerprint** → "Which logical file is this?"
-    
 - **UploadId** → "Which upload session is this?"
-    
 
 That's why production systems often maintain both concepts separately. This separation becomes especially important when supporting resumable uploads, retries, multiple devices, or deduplication.
 
+    Wait you said
 
-	Wait you said 
-	
-	S3 already stores:
-	
-	UploadId
-	
-	↓
-	
-	Part 1 → ETag
-	
-	Part 2 → ETag
-	
-	Part 3 → ETag
-	...
-	
-	But earlier you said client send the Etag-Part number list so that S3 can order and verify if S3 already has all the info then why verification is needed ??? To mark it as complete ???
+    S3 already stores:
+
+    UploadId
+
+    ↓
+
+    Part 1 → ETag
+
+    Part 2 → ETag
+
+    Part 3 → ETag
+    ...
+
+    But earlier you said client send the Etag-Part number list so that S3 can order and verify if S3 already has all the info then why verification is needed ??? To mark it as complete ???
 
 Excellent. This is exactly the kind of question that gets to the internals of the API.
 
@@ -1691,13 +1662,9 @@ If S3 simply looked at "everything uploaded"
 it has no idea whether
 
 - Part 4 is intentionally missing
-    
 - you're still uploading
-    
 - the upload crashed
-    
 - you want to overwrite Part 4 later
-    
 
 Only **you** know when the upload is logically complete.
 
@@ -1855,21 +1822,15 @@ The current design gives the client explicit control over exactly which uploaded
 The important mental model is:
 
 - **`UploadPart`** stores temporary parts.
-    
 - **`CompleteMultipartUpload`** is an explicit **commit operation**.
-    
 - The `(PartNumber, ETag)` list is **not sent because S3 forgot the parts**.
-    
 - It's sent because the client is declaring: **"These are the exact uploaded parts that constitute the final object."**
-    
 - S3 validates that declaration against its temporary storage and, if everything matches, atomically creates the final object and cleans up the temporary multipart state.
-    
 
 This separation between **staging** (uploading parts) and **commit** (assembling the object) is a common pattern in distributed systems because it allows retries, resumability, and atomic visibility.
 
-
-	What is S3 Event Notifications
-	Why do we need it -> I mean once client has successfully CompleteMultipartUpload or commited file upload then the client can simply send a request to server to update the status as completed and server can verify it and mark complete 
+    What is S3 Event Notifications
+    Why do we need it -> I mean once client has successfully CompleteMultipartUpload or commited file upload then the client can simply send a request to server to update the status as completed and server can verify it and mark complete
 
 Excellent question. You're challenging whether **S3 Event Notifications are actually necessary**. This is exactly the kind of trade-off discussion that comes up in senior system design interviews.
 
@@ -2282,9 +2243,7 @@ Index Search
 Notice the separation:
 
 - **Client → Backend** updates the user's upload state and UI.
-    
 - **S3 Event Notification** kicks off asynchronous background processing.
-    
 
 ---
 
@@ -2299,13 +2258,9 @@ For simply marking an upload as complete:
 S3 Event Notifications become valuable when you need:
 
 - Recovery if the client disappears after a successful upload.
-    
 - A trusted source of object creation events.
-    
 - Decoupled, asynchronous processing (thumbnails, virus scans, indexing, AI, analytics, etc.).
-    
 - Support for uploads coming from multiple independent producers.
-    
 
 ### Interview insight
 
@@ -2315,5 +2270,4 @@ If asked, "Should we use S3 Event Notifications to mark uploads complete?", a nu
 
 That answer demonstrates you understand both the **synchronous user workflow** and the **asynchronous distributed systems workflow**, along with the trade-offs.
 
-
-Reference - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5b5c49-be8c-83ee-8283-4ef931558c4b
+Reference - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5b5c49-be8c-83ee-8283-4ef931558c4b

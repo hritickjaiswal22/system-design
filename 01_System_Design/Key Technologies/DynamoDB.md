@@ -231,7 +231,6 @@ Get latest orders for a user
 
 Those access patterns determine your primary key and any GSIs.
 
-
 **==So basically with MongoDB if any attribute's query become very popular we can add it as index and get efficiency for it BUT With DynamoDB the primary key or secondary index should be defined at the time of creation otherwise it becomes a huge pain to optimize for any random attribute==**
 
-Further Reading - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5a32d9-bf00-83ee-abb1-b55899c06ab9
+Further Reading - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5a32d9-bf00-83ee-abb1-b55899c06ab9

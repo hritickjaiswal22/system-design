@@ -274,3 +274,431 @@ console.log(v.type);
 ```
 
 Give me your answers with the _reasoning_ (which rule wins and why) for each — not just the output. That's the format they'll actually push you on in a live loop.
+
+This is actually one of the most misunderstood parts of `this`.
+
+The **priority** is **not** something JavaScript checks one by one for every function call. Instead, it's a mental model for resolving situations where **multiple binding rules could seem to apply**.
+
+Let's build it up.
+
+---
+
+# Case 1: Default binding
+
+```js
+function foo() {
+  console.log(this);
+}
+
+foo();
+```
+
+How was `foo` invoked?
+
+```
+foo()
+```
+
+No object.  
+No `call`.  
+No `new`.
+
+So only **default binding** applies.
+
+---
+
+# Case 2: Implicit binding
+
+```js
+const obj = {
+  name: "Alice",
+  foo() {
+    console.log(this.name);
+  }
+};
+
+obj.foo();
+```
+
+Invocation:
+
+```
+obj.foo()
+```
+
+Since the function is called as a property of `obj`,
+
+```
+this === obj
+```
+
+No ambiguity.
+
+---
+
+# Case 3: Explicit binding
+
+```js
+function foo() {
+  console.log(this.name);
+}
+
+const obj = { name: "Alice" };
+
+foo.call(obj);
+```
+
+Now there are two possibilities:
+
+- Default binding (`foo()`)
+    
+- Explicit binding (`call(obj)`)
+    
+
+Which should win?
+
+JavaScript chooses:
+
+```
+call() > default
+```
+
+Output:
+
+```
+Alice
+```
+
+---
+
+# Here's where "priority" matters
+
+Suppose someone says:
+
+> "What if both default binding and explicit binding exist?"
+
+Example:
+
+```js
+foo.call(obj);
+```
+
+Without a priority rule, which one should JavaScript use?
+
+```
+foo()
+
+or
+
+call(obj)
+```
+
+The language defines:
+
+```
+Explicit > Default
+```
+
+---
+
+# Another example
+
+```js
+const obj = {
+  name: "Alice",
+};
+
+function foo() {
+  console.log(this.name);
+}
+
+obj.foo = foo;
+
+obj.foo.call({ name: "Bob" });
+```
+
+Now we have
+
+```
+obj.foo()
+```
+
+which suggests
+
+```
+this = obj
+```
+
+BUT
+
+```
+.call({ name: "Bob" })
+```
+
+also wants to decide `this`.
+
+Which wins?
+
+The answer is
+
+```
+Explicit binding wins.
+```
+
+Output
+
+```
+Bob
+```
+
+So
+
+```
+Explicit > Implicit
+```
+
+---
+
+# Highest priority: `new`
+
+Now let's create the famous conflict.
+
+```js
+function Foo(name) {
+  this.name = name;
+}
+
+const BoundFoo = Foo.bind({
+  name: "Fake"
+});
+
+const person = new BoundFoo("Real");
+
+console.log(person.name);
+```
+
+There are **two competing rules**.
+
+### Rule 1
+
+`bind()` says
+
+```
+this = { name: "Fake" }
+```
+
+### Rule 2
+
+`new` says
+
+```
+Create a new object.
+
+this = newly created object
+```
+
+Both cannot be true.
+
+Which wins?
+
+The language defines
+
+```
+new > bind
+```
+
+So
+
+```
+person.name
+
+↓
+
+"Real"
+```
+
+The fake object is ignored.
+
+---
+
+# Visualizing the conflicts
+
+## Default vs Explicit
+
+```
+foo()
+
+↓
+
+Default binding
+
+↓
+
+foo.call(obj)
+
+↓
+
+Explicit binding
+
+↓
+
+Winner:
+Explicit
+```
+
+---
+
+## Implicit vs Explicit
+
+```
+obj.foo()
+
+↓
+
+Implicit
+
+↓
+
+obj.foo.call(otherObj)
+
+↓
+
+Explicit
+
+↓
+
+Winner:
+Explicit
+```
+
+---
+
+## Explicit vs new
+
+```
+Foo.bind(fakeObj)
+
+↓
+
+Hard-bound this
+
+↓
+
+new BoundFoo()
+
+↓
+
+new wants its own object
+
+↓
+
+Winner:
+new
+```
+
+---
+
+# So why memorize the order?
+
+Because interview questions are often designed to create these conflicts.
+
+For example:
+
+```js
+function foo() {
+  console.log(this.name);
+}
+
+const obj1 = { name: "Alice" };
+const obj2 = { name: "Bob" };
+
+obj1.foo = foo;
+
+obj1.foo.call(obj2);
+```
+
+You should immediately think:
+
+```
+Implicit
+
+vs
+
+Explicit
+
+↓
+
+Explicit wins
+```
+
+Output
+
+```
+Bob
+```
+
+---
+
+Another:
+
+```js
+function Foo(name) {
+  this.name = name;
+}
+
+const Bound = Foo.bind({});
+
+const obj = new Bound("John");
+```
+
+You should immediately recognize:
+
+```
+Explicit (bind)
+
+vs
+
+new
+
+↓
+
+new wins
+```
+
+---
+
+# A good mental model
+
+Think of each invocation style as trying to "claim" the `this` value.
+
+```
+Default:
+"I'll use the global object (or undefined)."
+
+Implicit:
+"No, use the object before the dot."
+
+Explicit:
+"No, use the object passed to call/apply/bind."
+
+new:
+"No, we're constructing a brand-new object. Use that."
+```
+
+If only one rule applies, there's no conflict.
+
+If two rules compete, JavaScript has already decided the winner:
+
+```
+Default
+    ↓
+Implicit
+    ↓
+Explicit
+    ↓
+new
+```
+
+The higher rule overrides the lower one.
+
+This is why the "priority" is useful—it's a quick way to reason about tricky interview questions where multiple binding mechanisms appear in the same call.

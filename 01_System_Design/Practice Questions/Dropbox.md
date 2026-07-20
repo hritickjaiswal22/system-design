@@ -12,7 +12,7 @@ v2
 
 1. Users should be able to upload files
 2. Users should be able to download files
-3. Users should be able to share files 
+3. Users should be able to share files
 4. Users should be able to sync files across multiple devices
 
 # Non - Functional Requirements
@@ -26,7 +26,7 @@ v2
 
 users {
 id: UUID; (primary-key, not-null, snowflake style, unique)
-emailId: VARCHAR(100); (not-null,  unique)
+emailId: VARCHAR(100); (not-null, unique)
 created_at: TIMESTAMPTZ;
 updated_at: TIMESTAMPTZ;
 }
@@ -65,7 +65,7 @@ updated_at: TIMESTAMPTZ;
 
 # API Design
 
-POST /upload 
+POST /upload
 body {
 name: string;
 size: number;
@@ -79,7 +79,7 @@ GET /download/:metadata_id
 POST /share
 body {
 metadata_id: string;
-expiration_duration: number; 
+expiration_duration: number;
 }
 
 GET /share-download/:share_id
@@ -87,7 +87,6 @@ GET /share-download/:share_id
 # High Level Design
 
 ![[1784434038668.jpg]]
-
 
 # Notes
 
@@ -97,22 +96,23 @@ GET /share-download/:share_id
 
 1. The client makes request to the server for uploading the file with fingerprint, name, etc for POST upload
 2. The request reaches the L7 load balancer and get routed to one of the app servers
-3. The server creates an entry in db with upload_status "PENDING" and returns the S3 pre-signed_url with an expiry appropriate according to file size 
-4. The client receives the pre-signed url and makes request to S3 and get's the upload_id 
-5. Client uses that upload_id and requests the server for pre-signed urls for first few chunks (for uploading files S3 multipart upload will be used and therefore large files will be chunked and therefore per-signed urls for all the chunks are required but rather than generating pre-signed urls for all the  chunks at once it is done in progressive batches)
-6. Upon receiving the pre-signed urls ; parallel upload is done for those chunks 
+3. The server creates an entry in db with upload_status "PENDING" and returns the S3 pre-signed_url with an expiry appropriate according to file size
+4. The client receives the pre-signed url and makes request to S3 and get's the upload_id
+5. Client uses that upload_id and requests the server for pre-signed urls for first few chunks (for uploading files S3 multipart upload will be used and therefore large files will be chunked and therefore per-signed urls for all the chunks are required but rather than generating pre-signed urls for all the chunks at once it is done in progressive batches)
+6. Upon receiving the pre-signed urls ; parallel upload is done for those chunks
 7. Whenever a chunk is successfully uploaded the S3 returns an ETag for that chunk number to the client and also stores a reference of chunk number and corresponding ETag for that upload_id
 8. Above process is repeated till all the chunks are uploaded then the client requests the S3 to CompleteUpload and provides a chunk number and corresponding Etag list to S3 so that it can assemble and validate chunks are their upload if successful S3 combines and orders those separated chunks into a proper resource file
 9. Upon success response the client requests the server to update the status to complete and therefore the server validates it with S3 and marks the status as complete
 10. The S3 event notification is used to push the successful upload to Kafka as a queue so that compression, virus checks , replication, etc can be done asynchronously without blocking the User's request and improved UC
 11. Use of fingerprint allows resuming uploads and checking same upload is being carried out
-12. Use of chunking allows for progress tracking, pausing and resuming uploads 
+12. Use of chunking allows for progress tracking, pausing and resuming uploads
 13. ETag help with commiting uploads as successful and proper upload of individual chunks and even if client loses ETag-chunk number mapping the S3 has it and get a reference of it using upload_id
 14. Since upload is directly done to S3 it allows for faster uploads as S3 is a dedicated managed service by AWS, the app servers are not occupied managing uploads rather listening to requests (their actual functionality) hence better scalability and since S3 is a managed service it allows for massive scale without much developer intervention and hassle
 15. Upload for smaller chunks allow for faster uploads even in low internet speed and congested networks
 16. Checksums are also utilized for validating the response chunk is correct at receiver's end
 
 #### Read Path
+
 1. The client requests the server for file download with the id
 2. The request hits the L7 load balancer and the request is routed to one of the app servers
 3. The app servers verifies the request if valid
@@ -127,9 +127,9 @@ GET /share-download/:share_id
 #### Share Path
 
 1. The resource/file owner requests the backend (L7 LB -> Server -> DB) for sharing a file with id and expiration
-2. The backend returns a share id 
+2. The backend returns a share id
 3. The owner shares that share id with the target audience or clients
-4. The client then uses that id for requesting the download 
+4. The client then uses that id for requesting the download
 5. After above the download is as above read path (signed url -> download)
 
 #### File sync across multiple devices
@@ -148,28 +148,25 @@ GET /share-download/:share_id
 4. Use of S3 multipart upload API with chunking, checksums, fingerprints, individual chunk uploads , etc allows for large, pause-resumeable, retries and scalable uploads
 5. The system already makes use of CDN allowing for near client low latency downloads along with direct S3 downloads as fallback; makes use of redis for caching metadata and reducing latency even further
 6. To reduce upload latency even further compression can be used
-7. Kafka is used for async processing as Distributed Message Queue for operations like compression, virus checks , preview url generation, replication (for backup and durability); the workers are from app servers and update the db ,cache and CDN accordingly 
-
+7. Kafka is used for async processing as Distributed Message Queue for operations like compression, virus checks , preview url generation, replication (for backup and durability); the workers are from app servers and update the db ,cache and CDN accordingly
 
 # Reviews
 
-https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5c63ac-cb70-83ee-bf13-adf3384fade3
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5c63ac-cb70-83ee-bf13-adf3384fade3
 
 https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5c65d9-67fc-83ee-a6ff-0abc598fcd5a
 
 https://claude.ai/chat/4e09906d-ae39-4c85-b331-96cfb716021f
 
-
 # References
 
-https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5b3e02-e9c4-83e8-b095-47ef4081c5c1
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5b3e02-e9c4-83e8-b095-47ef4081c5c1
 
-https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5b8180-35ec-83ee-9e0e-0f9bde78cf13
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5b8180-35ec-83ee-9e0e-0f9bde78cf13
 
-https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5b91ed-6e64-83ee-ad2b-1b4a7b813a44
+https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5b91ed-6e64-83ee-ad2b-1b4a7b813a44
 
-For downloads - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-system-design-masterclass-target-20-lpa/c/6a5b98f1-96f8-83ee-b8a0-fa5323e2dd83 (Basically the because of range requests and parallel downloads the clients can directly query the bytes without any chunking nonsense and even connection breaks just remembering range where to continue from is enough)
-
+For downloads - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac/c/6a5b98f1-96f8-83ee-b8a0-fa5323e2dd83 (Basically the because of range requests and parallel downloads the clients can directly query the bytes without any chunking nonsense and even connection breaks just remembering range where to continue from is enough)
 
 # Improvements from v1 to v2
 
@@ -182,6 +179,7 @@ For downloads - https://chatgpt.com/g/g-p-6a49c2f6acc88191b2b24496fa57d7ac-syste
 - [x] ✅ Deep dive: security (signed URLs, encryption, ACLs)
 - [x] ✅ Explain Kafka correctly
 - [x] ✅ Design the **device synchronization flow** (how changes propagate to other devices)
+
 # Learnings
 
 1. S3 multipart upload
