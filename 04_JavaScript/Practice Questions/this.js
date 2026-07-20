@@ -1,35 +1,35 @@
-// v1
+// v2
 
 Function.prototype.myCall = function (ctx, ...args) {
+  if (typeof this !== "function") {
+    throw new TypeError("myCall must be called on a function");
+  }
+  ctx = ctx == null ? globalThis : Object(ctx);
   const fn = this;
+  const temp = Symbol();
 
-  ctx._ = fn;
+  ctx[temp] = fn;
 
-  const result = ctx._(...args);
-
-  delete ctx._;
-
-  return result;
+  try {
+    return ctx[temp](...args);
+  } finally {
+    delete ctx[temp];
+  }
 };
 
-Function.prototype.myApply = function (ctx, argsArr) {
+Function.prototype.myApply = function (ctx, argsArr = []) {
+  if (typeof this !== "function") {
+    throw new TypeError("myApply must be called on a function");
+  }
+  ctx = ctx == null ? globalThis : Object(ctx);
   const fn = this;
+  const temp = Symbol();
 
-  ctx._ = fn;
-
-  const result = ctx._(...argsArr);
-
-  delete ctx._;
-
-  return result;
-};
-
-Function.prototype.myBind = function (ctx, ...args1) {
-  const fn = this;
-
-  return (...args2) => {
-    return fn.call(ctx, ...args1, ...args2);
-  };
+  try {
+    return ctx[temp](...argsArr);
+  } finally {
+    delete ctx[temp];
+  }
 };
 
 // Review
