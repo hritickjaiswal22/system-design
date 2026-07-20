@@ -1,5 +1,3 @@
-// v2
-
 Function.prototype.myCall = function (ctx, ...args) {
   if (typeof this !== "function") {
     throw new TypeError("myCall must be called on a function");
@@ -24,6 +22,8 @@ Function.prototype.myApply = function (ctx, argsArr = []) {
   ctx = ctx == null ? globalThis : Object(ctx);
   const fn = this;
   const temp = Symbol();
+
+  ctx[temp] = fn;
 
   try {
     return ctx[temp](...argsArr);
@@ -51,6 +51,3 @@ Function.prototype.myBind = function (ctx, ...args1) {
 
   return boundFn;
 };
-
-// Review
-// https://chatgpt.com/g/g-p-6a49c38571148191bf064b777151e370-software-engineering-upskilling-2026/c/6a5c7c6f-fd30-83e8-9fa5-2226ca132d35
