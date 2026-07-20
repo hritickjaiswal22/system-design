@@ -1,0 +1,30 @@
+- [ ] Normalization , De-Normalization , What is , Impact , When to and When not to, Does it affect NoSQL DBs
+- [x] Consistent Hashing(https://www.hellointerview.com/learn/system-design/core-concepts/consistent-hashing) 
+- [x] WebSockets vs SSE vs Long Polling
+- [ ] SSE 
+- [ ] Scaling WebSockets 
+- [x] Caching(https://www.hellointerview.com/learn/system-design/core-concepts/caching) + Redis(https://www.hellointerview.com/learn/system-design/deep-dives/redis) (7-07-26)
+- [ ] CAP Theorem(https://www.hellointerview.com/learn/system-design/core-concepts/cap-theorem)  
+- [ ] WebRTC 
+- [ ] Cassandra (https://www.hellointerview.com/learn/system-design/deep-dives/cassandra) 
+- [ ] DynamoDB (https://www.hellointerview.com/learn/system-design/deep-dives/dynamodb) 
+- [ ] NoSQL DBs 
+- [ ] BASE then ACID vs BASE 
+- [ ] Redis vs Memcached 
+- [ ] API Gateway(https://www.hellointerview.com/learn/system-design/deep-dives/api-gateway) 
+- [ ] Rate Limiting 
+- [ ] Idempotency (What , when and how) 
+- [ ] Kafka (https://www.hellointerview.com/learn/system-design/deep-dives/kafka)
+- [ ] Kafka vs RabbitMQ 
+- [ ] Pub/Sub Systems 
+- [ ] HLS vs MPEG DASH 
+- [ ] Real-time Updates (https://www.hellointerview.com/learn/system-design/patterns/realtime-updates)
+- [ ] Dealing with Contention (https://www.hellointerview.com/learn/system-design/patterns/dealing-with-contention)
+- [ ] Multi-step Processes (https://www.hellointerview.com/learn/system-design/patterns/multi-step-processes)
+- [ ] Scaling Reads (https://www.hellointerview.com/learn/system-design/patterns/scaling-reads)
+- [ ] Scaling Writes (https://www.hellointerview.com/learn/system-design/patterns/scaling-writes)
+- [ ] Handling Large Blobs (https://www.hellointerview.com/learn/system-design/patterns/large-blobs)
+- [ ] Managing Long Running Tasks (https://www.hellointerview.com/learn/system-design/patterns/long-running-tasks)
+- [ ] Storage Types (Object vs Block vs File) 
+- [ ] JWT / OAuth 2.0 
+- [ ] [Sharding](https://www.hellointerview.com/learn/system-design/core-concepts/sharding) 

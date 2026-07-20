@@ -1,0 +1,12 @@
+- [ ] RADIO framework
+- [ ] Rendering Strategies (Server Components, SSG, SSR, ISR, CSR, Edge Rendering) (Pros , Cons, Which to pick , why and why discard others)
+- [ ] Architecture (high level) Component composition + folder/data flow strategy 
+- [ ] Authentication Token placement decided here 
+- [ ] API design REST vs GraphQL, contract as deliverable 
+- [ ] State management Server state (React Query/SWR) + client state, one conversation 
+- [ ] Caching 
+- [ ] Optimizations: Performance (Core Web Vitals, bundle strategy, caching) 
+- [ ] Optimizations: Networking optimization (Prefetch, code split, request waterfalls) 
+- [ ] Error handling and resilience
+- [ ] Security
+- [ ] Observability (EXPANDED — RUM, error tracking, feature flags)
