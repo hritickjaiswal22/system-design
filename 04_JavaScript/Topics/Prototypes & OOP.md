@@ -72,3 +72,38 @@ Although I explained everything with constructor functions and classes here, ano
 A strong answer is:
 
 > "`Object.create()` creates the object with the desired prototype from the start, avoiding prototype mutation. It's the standard API, avoids the performance costs associated with changing an object's prototype after creation, is clearer in intent, and also supports creating objects with a `null` prototype—something `{}` cannot do."
+
+
+Review my understanding for Prototypes in JS
+
+In JS whenever a constructor function is created another object is created automatically know as fn.prototype (to access it use "fn.prototype") and whenever an object is created by using new for that constructor function the objects created a proto (dunder proto) property pointing/referencing to that fn.prototype 
+
+Now why is this fn.prototype is useful because it allows for sharing of methods and properties among instances so that multiple instances do not have to waste memory creating them and can be shared e.g. .toString(), etc.
+
+Now ES6 classes are just syntactical sugar for constructor function the constructor of a class is equivalent to the constructor function while the properties defined by 'this.' become its properties and class methods are simply fn.prototype.method (hence shared among instances) 
+
+Now classes can be extended 
+
+```
+class Dog {
+...
+}
+
+class Chihuahua extends Dog {
+...
+}
+```
+
+What it simply means is that Chihuahua.prototype._ _ proto _ _  = Dog.prototype
+
+And this chain allows for using/sharing of methods and properties
+
+Objec.create(x) is nothing but essentially does is 
+
+const obj = {}
+obj._ _ proto_ _  = x
+
+Just more modern, safer and optimized way of doing it 
+
+Review of above understanding - https://chatgpt.com/g/g-p-6a49c38571148191bf064b777151e370-software-engineering-upskilling-2026/c/6a6030f6-e180-83ee-a5c7-fdac6bd487ef
+

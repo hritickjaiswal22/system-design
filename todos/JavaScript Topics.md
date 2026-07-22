@@ -1,4 +1,4 @@
-# JavaScript Interview Revision Checklist — SDE1/SDE2 (16+ LPA bar)
+# JavaScript Interview Revision Checklist — SDE1/SDE2
 
 ★ = high-frequency at target orgs (esp. machine coding rounds)
 
@@ -23,13 +23,13 @@ Practice Thread - https://chatgpt.com/g/g-p-6a49c38571148191bf064b777151e370-sof
 
 ## 3. Prototypes & OOP
 
-- [ ] Prototype chain, `__proto__` vs `.prototype`
-- [ ] Object.create
-- [ ] Class syntax as sugar over prototypes
-- [ ] Prototypal inheritance patterns
-- [ ] Object.freeze / seal / isFrozen
+- [x] Prototype chain, `__proto__` vs `.prototype`
+- [x] Object.create
+- [x] Class syntax as sugar over prototypes
+- [x] Prototypal inheritance patterns
+- [x] Object.freeze / seal / isFrozen
 - [ ] Getters/setters, computed properties
-- [ ] instanceof mechanics
+- [x] instanceof mechanics
 
 ## 4. Async JavaScript
 
