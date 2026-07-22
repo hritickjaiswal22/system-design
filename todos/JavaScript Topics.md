@@ -33,8 +33,8 @@ Practice Thread - https://chatgpt.com/g/g-p-6a49c38571148191bf064b777151e370-sof
 
 ## 4. Async JavaScript
 
-- [ ] ★ Event loop — call stack, Web APIs, microtask queue, macrotask queue
-- [ ] ★ Microtask vs macrotask ordering (Promise.then vs setTimeout vs queueMicrotask)
+- [x] ★ Event loop — call stack, Web APIs, microtask queue, macrotask queue
+- [x] ★ Microtask vs macrotask ordering (Promise.then vs setTimeout vs queueMicrotask)
 - [ ] Promise states, chaining, error propagation
 - [ ] ★ Promise.all vs allSettled vs race vs any — behavior on rejection
 - [ ] ★ Implement Promise (basic) / Promise.all from scratch
