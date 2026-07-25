@@ -11,7 +11,7 @@
 - [ ] NoSQL DBs 
 - [ ] BASE then ACID vs BASE 
 - [ ] Redis vs Memcached 
-- [ ] API Gateway(https://www.hellointerview.com/learn/system-design/deep-dives/api-gateway) 
+- [x] API Gateway(https://www.hellointerview.com/learn/system-design/deep-dives/api-gateway) 
 - [ ] Rate Limiting 
 - [ ] Idempotency (What , when and how) 
 - [ ] Kafka (https://www.hellointerview.com/learn/system-design/deep-dives/kafka)
