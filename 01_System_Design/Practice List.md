@@ -1,0 +1,33 @@
+# Practice List
+
+- [ ] Bitly
+- [ ] Dropbox
+- [ ] Local Delivery Service
+- [ ] Ticketmaster
+- [ ] FB News Feed
+- [ ] Tinder
+- [ ] LeetCode
+- [ ] WhatsApp
+- [ ] Rate Limiter
+- [ ] YouTube
+- [ ] FB Live Comments
+- [ ] YouTube Top K
+- [ ] Uber
+- [ ] Web Crawler
+- [ ] Ad Click Aggregator
+- [ ] FB Post Search
+- [ ] Yelp
+- [ ] Instagram
+- [ ] Strava
+- [ ] Distributed Cache
+- [ ] Online Auction
+- [ ] Job Scheduler
+- [ ] News Aggregator
+- [ ] Price Tracking Service
+- [ ] Robinhood
+- [ ] Google Docs
+- [ ] Payment System
+- [ ] Metrics Monitoring
+- [ ] Online Chess
+- [ ] ChatGPT
+- [ ] Notification Service
