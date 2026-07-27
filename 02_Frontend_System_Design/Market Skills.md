@@ -1,0 +1,3 @@
+- [ ] Hands-on experience with GraphQL (Apollo Client or similar).
+- [ ] Experience implementing WebSocket-based real-time applications.
+- [ ] 
