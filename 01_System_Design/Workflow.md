@@ -123,7 +123,10 @@ After 20–30 problems, you'll realize the same patterns appear repeatedly.
 
 ---
 
-### 5. Review before every new problem (2–5 minutes)
+### 5. If required mark it as a Core Concept or Key Technology and create notes for it using the templates
+
+---
+### 6. Review before every new problem (2–5 minutes)
 
 Exactly as you said.
 
