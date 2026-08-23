@@ -4,165 +4,45 @@ status: Studying
 tags:
   - system-design
   - core-concept
+Instruction: Each Answer should be in your own words NOT FUCKING AI and NOT MORE THAN 2-3 LINES
 created:
 updated:
 ---
-# {{title}}
-
-> **Definition:**
+## What it is (2-3 lines, your own words, not the textbook's)
 
 
 ---
 
-# ❓ What problem does it solve?
-#### (max 3 bullets — if you need more, you don't understand it yet)
+## Problem it solves
 
-- 
-- 
-- 
 
 ---
 
-# 🎯 Interview Triggers (When should I think about this?)
-#### (the phrase/requirement in a prompt that should make this fire in your head)
+## When to use 
 
-- [ ]
-- [ ]
-- [ ]
-- [ ]
 
 ---
 
-# ⚙️ How does it work?
-#### ⏱ Timebox: 15 min. Stop at "components + data flow." No protocol-spec / source-level depth on pass 1.
+## When not to use
 
-## High-Level Flow
-
-1.
-2.
-3.
-4.
-5.
-
-### Diagram
-
-```text
-
-```
 
 ---
 
-# ✅ Advantages
 
-- 
-- 
-- 
+## Key trade-off
+
 
 ---
 
-# ❌ Limitations
+## Interview-ready answer
 
-- 
-- 
-- 
 
 ---
 
-# ⚖️ Tradeoffs
+## Came up in
 
-| Gain | Cost |
-|------|------|
-| | |
-| | |
-| | |
 
 ---
 
-# 🔄 Alternatives
 
-| Alternative | When Better |
-| ----------- | ----------- |
-|             |             |
-|             |             |
-|             |             |
-
----
-
-# 🔢 Numbers to Remember
-#### (throughput, latency, limits — the stuff that makes an answer sound L5, not L4)
-
-- 
-- 
-- 
----
-
-# 🛠 Design Decisions
-
-#### (questions an interviewer will force you to answer if you bring this up)
-
-Questions that need to be answered when using this concept.
-
-- 
-- 
-- 
-- 
-
----
-
-# 🏗 Real World Usage
-
-| System | Why Used? |
-|---------|-----------|
-| | |
-| | |
-| | |
-
----
-
-# 🎤 Common Interview Questions
-
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-
----
-
-# ⚠️ Common Mistakes
-
-- 
-- 
-- 
-
----
-
-# 📝 Personal Notes
-
-#### (anything you were tempted to rabbit-hole on, with a date. Only chase it if it recurs across 2+ problems.)
--
-
----
-
-# ⚡ 30-Second Revision
-
-### Purpose
-
-
-### Interview Triggers
-
-- ✓
-- ✓
-- ✓
-
-### Key Tradeoffs
-
-**Pros**
-- 
-
-**Cons**
-- 
-
-### Used In
-
-- 
-- 
+## How it works (If can be explained in 2-3 lines otherwise Depth Dump)

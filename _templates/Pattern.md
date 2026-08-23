@@ -1,25 +1,39 @@
 ---
-type: Key Technology
+type: Pattern
 status: Studying
 tags:
   - system-design
-  - technology
+  - pattern
 Instruction: Each Answer should be in your own words NOT FUCKING AI and NOT MORE THAN 2-3 LINES
 created:
 updated:
 ---
-## When to use 
+# {{Name}}
+
+
+## Symptom
 
 
 ---
 
-## When not to use
+## Solution
+
+
+---
+
+## Trade-offs
+
+
+---
+
+## When to avoid
 
 
 ---
 
 
-## Gotchas
+## Related pattern
+
 
 
 ---
