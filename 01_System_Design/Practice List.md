@@ -1,7 +1,7 @@
 # Practice List
 
-- [ ] Bitly
-- [ ] Dropbox
+- [x] Bitly
+- [x] Dropbox
 - [ ] Local Delivery Service
 - [ ] Ticketmaster
 - [ ] FB News Feed
