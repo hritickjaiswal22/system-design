@@ -3,13 +3,15 @@
 1. Users should be able to upload files
 2. Users should be able to download uploaded files
 3. Users should be able to sync file changes across multiple devices
-4. (Optional/Bonus) Users should be able to able to share 
+4. Users should be able to able to share files
+
 # Non-Functional Requirements
 
 1. System must support upload of large files (upto 4-6 Gbs)
 2. System must support pause-resume-able uploads
 3. System must prioritize availability over consistency 
 4. System must support persistent uploads i.e. after successful upload the system must persist the data even for recovery
+5. The system should make upload, download, and sync times as fast as possible (low latency).
 
 # Assumptions
 
@@ -22,7 +24,7 @@
 
 # API Design
 
-POST /upload {
+POST /files {
 filename
 filesize
 checksum
@@ -30,9 +32,17 @@ checksum
 
 userId from JWT auth
 
-Returns session unique uploadId
+	Returns session unique uploadId
 
-GET /file?uploadId={val} for downloads
+GET /files/uploadId for downloads DO NOT USE Query Params
+
+	Downloads the file
+
+POST /files/uploadId/share {
+User[]
+}
+
+	Returns an id which then can be used by receiver  
 
 # High Level Design
 ![[1788301775226.jpg]]
@@ -73,6 +83,16 @@ GET /file?uploadId={val} for downloads
 2. Whenever there is a new upload/update the client initiates download of the update using above download
 3. And syncs with other devices 
 
+### Share Path
+
+1. Create a separate shares table in DB
+2. Client requests a share of a file and provides the receivers list
+3. The request reaches the app server , validated and then the receivers receive the download url via E-Mail or similar service
+
 ### Notes
 
 1. The system for scaling/handling large number of reads uses sharding + master-multiple read replicas for each shard for scaling reads and sharding for scaling writes for metadata DB
+
+# Comparison Conclusion
+
+The solution provided is definetly good and scale-able but missing a few things like security , NFR for low latency , most of the design for low latency was already present in your design but was not highlighted

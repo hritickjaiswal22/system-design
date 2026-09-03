@@ -32,7 +32,7 @@ Use these **==4 Moves (DB only store metadata, pre-signed urls to keep data byte
 
 ## When not to use
 
-N/A
+N/A - Pretty straightforward use this for whenever any system moving large blobs otherwise not.
 
 ---
 
